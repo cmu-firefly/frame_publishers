@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python2
 
 import rospy
 import tf
@@ -33,19 +33,19 @@ class ENUPublisher:
         self.y = None
         self.z = None
 
-    def attitude_callback(self, data: QuaternionStamped):
+    def attitude_callback(self, data):
         self.attitude = data.quaternion
         self.attitude_stamp = data.header.stamp
         self.publish_tf()
 
-    def gps_pos_callback(self, data: NavSatFix):
+    def gps_pos_callback(self, data):
         self.lat = data.latitude
         self.lon = data.longitude
         self.h = data.altitude
         self.gps_stamp = data.header.stamp
         self.publish_tf()
 
-    def set_enu_datum_to_current_handler(self, req: EmptyRequest):
+    def set_enu_datum_to_current_handler(self, req):
         self.lat0 = self.lat
         self.lon0 = self.lon
         self.h0 = self.h
