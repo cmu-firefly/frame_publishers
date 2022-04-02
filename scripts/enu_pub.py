@@ -4,15 +4,15 @@ import rospy
 import tf
 from geometry_msgs.msg import QuaternionStamped
 from sensor_msgs.msg import NavSatFix
+from sensor_msgs.msg import Empty
 import pymap3d as pm
-from std_srvs.srv import Empty, EmptyResponse, EmptyRequest
 
 
 class ENUPublisher:
     def __init__(self):
         rospy.Subscriber('dji_sdk/attitude', QuaternionStamped, self.attitude_callback)
         rospy.Subscriber('dji_sdk/gps_position', NavSatFix, self.gps_pos_callback)
-        rospy.Service('set_enu_datum_to_current', Empty, self.set_enu_datum_to_current_handler)
+        rospy.Service('set_local_pos_ref', Empty, self.set_local_pos_ref_handler)
         # TODO: Publish lat, lon, height of enu datum
         # TODO: Provide service for manually setting enu datum
         self.br = tf.TransformBroadcaster()
@@ -45,12 +45,11 @@ class ENUPublisher:
         self.gps_stamp = data.header.stamp
         self.publish_tf()
 
-    def set_enu_datum_to_current_handler(self, req):
+    def set_local_pos_ref_handler(self, data):
         self.lat0 = self.lat
         self.lon0 = self.lon
         self.h0 = self.h
         self.publish_tf()
-        return EmptyResponse()
 
     def publish_tf(self):
         if self.attitude is None \
