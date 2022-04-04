@@ -12,7 +12,7 @@ class ENUPublisher:
     def __init__(self):
         rospy.Subscriber('dji_sdk/attitude', QuaternionStamped, self.attitude_callback)
         rospy.Subscriber('dji_sdk/gps_position', NavSatFix, self.gps_pos_callback)
-        rospy.Service('set_local_pos_ref', Empty, self.set_local_pos_ref_handler)
+        rospy.Subscriber('set_local_pos_ref', Empty, self.set_local_pos_ref_handler)
         # TODO: Publish lat, lon, height of enu datum
         # TODO: Provide service for manually setting enu datum
         self.br = tf.TransformBroadcaster()
